@@ -60,3 +60,24 @@ resource "azurerm_role_assignment" "acr_pull" {
   role_definition_name = "AcrPull"
   scope                = azurerm_container_registry.example.id
 }
+
+resource "azurerm_log_analytics_workspace" "example" {
+  name                = "examplelaw"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+}
+
+resource "azurerm_application_insights" "example" {
+  name                = "example-app-insights"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  application_type    = "web"
+}
+
+resource "azurerm_role_assignment" "log_analytics" {
+  principal_id         = azurerm_kubernetes_cluster.example.identity[0].principal_id
+  role_definition_name = "Log Analytics Reader"
+  scope                = azurerm_log_analytics_workspace.example.id
+}
