@@ -1,0 +1,22 @@
+[tools]
+opentofu = "1.11.5"
+pre-commit = "4.5.1"
+tflint = "0.61.0"
+terraform-docs = '0.21.0'
+tfupdate = '0.9.3'
+
+[tasks.install]
+run = 'pre-commit install'
+
+[tasks.update]
+run = [
+  'pre-commit autoupdate',
+]
+
+[tasks.format]
+dir = "{{ config_root }}/tf"
+run = ['tofu fmt']
+
+[tasks.check]
+dir = "{{ config_root }}/tf"
+run = ['tflint --recursive --call-module-type=none', 'tofu validate']
