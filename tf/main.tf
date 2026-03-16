@@ -45,3 +45,18 @@ output "kube_config" {
   value     = azurerm_kubernetes_cluster.example.kube_config_raw
   sensitive = true
 }
+
+resource "azurerm_container_registry" "example" {
+  name                = "acrqsdqzdsdsdgi"
+  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.example.location
+  sku                 = "Basic"
+
+  admin_enabled = true
+}
+
+resource "azurerm_role_assignment" "acr_pull" {
+  principal_id         = azurerm_kubernetes_cluster.example.identity[0].principal_id
+  role_definition_name = "AcrPull"
+  scope                = azurerm_container_registry.example.id
+}
