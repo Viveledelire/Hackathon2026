@@ -14,8 +14,10 @@ services:
       retries: 10
 
   api:
-    image: node:18
-    working_dir: /workspace
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: app-api:local
     depends_on:
       postgres:
         condition: service_healthy
@@ -26,11 +28,6 @@ services:
       PORT: 3000
     ports:
       - '3000:3000'
-    volumes:
-      - .:/workspace
-      - api_node_modules:/workspace/node_modules
-    command: ['sh', './docker/start-api.sh']
 
 volumes:
   postgres_data:
-  api_node_modules:
