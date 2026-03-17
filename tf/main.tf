@@ -76,10 +76,10 @@ resource "azurerm_application_insights" "devops03_app_insights" {
   workspace_id        = azurerm_log_analytics_workspace.sup_de_vinci_law.id
 }
 
-resource "azurerm_role_assignment" "log_analytics" {
+resource "azurerm_role_assignment" "monitor_workspace" {
   principal_id         = azurerm_kubernetes_cluster.devops03_aks.identity[0].principal_id
-  role_definition_name = "Log Analytics Reader"
-  scope                = azurerm_log_analytics_workspace.sup_de_vinci_law.id
+  role_definition_name = "Monitoring Metrics Publisher"
+  scope                = azurerm_monitor_workspace.sup_de_vinci_monitor.id
 }
 
 resource "azurerm_monitor_workspace" "sup_de_vinci_monitor" {
