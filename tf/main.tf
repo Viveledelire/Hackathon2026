@@ -74,10 +74,34 @@ resource "azurerm_application_insights" "example" {
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
   application_type    = "web"
+  workspace_id        = azurerm_log_analytics_workspace.example.id
 }
 
 resource "azurerm_role_assignment" "log_analytics" {
   principal_id         = azurerm_kubernetes_cluster.example.identity[0].principal_id
   role_definition_name = "Log Analytics Reader"
-  scope                = azurerm_log_analytics_workspace.example.id
+  scope                = azurerm_monitor_workspace.example.id
+}
+
+resource "azurerm_monitor_workspace" "example" {
+  name                = "example-mamw"
+  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.example.location
+}
+
+resource "azurerm_dashboard_grafana" "example" {
+  name                              = "example-dg"
+  resource_group_name               = azurerm_resource_group.example.name
+  location                          = "norwayeast"
+  grafana_major_version             = 12
+  api_key_enabled                   = true
+  deterministic_outbound_ip_enabled = true
+  public_network_access_enabled     = true
+
+  identity {
+    type = "SystemAssigned"
+  }
+  azure_monitor_workspace_integrations {
+    resource_id = azurerm_monitor_workspace.example.id
+  }
 }
