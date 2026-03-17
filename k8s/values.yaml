@@ -1,0 +1,25 @@
+image:
+  repository: "otel/opentelemetry-collector-contrib"
+  tag: "latest"  # or a specific version
+
+config:
+  receivers:
+    otlp:
+      protocols:
+        http: {}
+        grpc: {}
+  processors:
+    batch: {}
+  exporters:
+    azuremonitor:
+      instrumentation_key: "5898f490-88dc-443f-9a52-e4d7ffa94d3d"
+  service:
+    pipelines:
+      traces:
+        receivers: [otlp]
+        processors: [batch]
+        exporters: [azuremonitor]
+      metrics:
+        receivers: [otlp]
+        processors: [batch]
+        exporters: [azuremonitor]

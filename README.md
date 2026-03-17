@@ -29,5 +29,5 @@ docker push devops03acr.azurecr.io/app-api:1.0.0
 
 ```bash
 helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
-helm install my-opentelemetry-collector open-telemetry/opentelemetry-collector --set image.repository="otel/opentelemetry-collector-k8s" --set mode=daemonset -n hackathon-2026
+helm install my-opentelemetry-collector open-telemetry/opentelemetry-collector --set image.repository="otel/opentelemetry-collector-k8s" --set mode=deployment -f k8s/values.yaml -n hackathon-2026
 ```

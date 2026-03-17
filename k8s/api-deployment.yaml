@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: devops03acr.azurecr.io/app-api:1.0.0
+          image: devops03acr.azurecr.io/app-api:1.1.0
           ports:
             - containerPort: 3000
               name: http
@@ -26,13 +26,11 @@ spec:
               value: development
             - name: PORT
               value: "3000"
-          # readinessProbe:
-          #   exec:
-          #     command:
-          #       - pg_isready
-          #       - -U
-          #       - postgres
-          #       - -d
-          #       - realworld
-          #   initialDelaySeconds: 5
-          #   timeoutSeconds: 5
+            - name: OTEL_SERVICE_NAME
+              value: realworld-api
+            - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+              value: http://my-opentelemetry-collector.hackathon-2026.svc.cluster.local:4318/v1/traces
+            - name: OTEL_TRACES_EXPORTER
+              value: otlp
+            - name: OTEL_EXPORTER_OTLP_PROTOCOL
+              value: http/protobuf
