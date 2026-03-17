@@ -105,3 +105,15 @@ resource "azurerm_dashboard_grafana" "example" {
     resource_id = azurerm_monitor_workspace.example.id
   }
 }
+
+data "azurerm_client_config" "current_user" {}
+
+resource "azurerm_role_assignment" "grafana_viewer" {
+  principal_id         = data.azurerm_client_config.current_user.object_id
+  role_definition_name = "Grafana Viewer"
+  scope                = azurerm_dashboard_grafana.example.id
+}
+
+output "grafana_dashboard_url" {
+  value = azurerm_dashboard_grafana.example.endpoint
+}
