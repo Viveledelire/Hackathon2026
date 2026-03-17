@@ -22,3 +22,12 @@ az aks get-credentials --name <aks-cluster-name> --resource-group <resource-grou
 az acr login --name <acr-name>
 docker push <acr-name>.azurecr.io/<image-name>:<tag>
 ```
+
+## Install App
+
+* Collecteur Otel
+
+```bash
+helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
+helm install my-opentelemetry-collector open-telemetry/opentelemetry-collector --set image.repository="otel/opentelemetry-collector-k8s" --set mode=daemonset -n hackathon-2026
+```
