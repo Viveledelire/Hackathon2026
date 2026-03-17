@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+spec:
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+        - name: api
+          image: devops03acr.azurecr.io/app-api:1.0.0
+          ports:
+            - containerPort: 3000
+              name: http
+          env:
+            - name: DATABASE_URL
+              value: postgresql://postgres:postgres@postgres:5432/realworld?schema=public
+            - name: JWT_SECRET
+              value: dev-secret
+            - name: NODE_ENV
+              value: development
+            - name: PORT
+              value: "3000"
+          # readinessProbe:
+          #   exec:
+          #     command:
+          #       - pg_isready
+          #       - -U
+          #       - postgres
+          #       - -d
+          #       - realworld
+          #   initialDelaySeconds: 5
+          #   timeoutSeconds: 5
