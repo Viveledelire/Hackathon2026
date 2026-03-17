@@ -1,6 +1,7 @@
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
+import { PrismaInstrumentation } from '@prisma/instrumentation';
 
 const buildTracesEndpoint = (): string => {
   if (process.env.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT) {
@@ -14,6 +15,15 @@ const buildTracesEndpoint = (): string => {
 
   return 'http://localhost:4318/v1/traces';
 };
+
+const sdk = new NodeSDK({
+  traceExporter: new OTLPTraceExporter({ url: tracesEndpoint }),
+  serviceName,
+  instrumentations: [
+    getNodeAutoInstrumentations(),
+    new PrismaInstrumentation(),
+  ],
+});
 
 const tracesEndpoint = buildTracesEndpoint();
 const serviceName = process.env.OTEL_SERVICE_NAME ?? 'realworld-api';
