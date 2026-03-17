@@ -19,8 +19,8 @@ az aks get-credentials --name <aks-cluster-name> --resource-group <resource-grou
 ## Login to ACR Registry
 
 ```bash
-az acr login --name <acr-name>
-docker push <acr-name>.azurecr.io/<image-name>:<tag>
+az acr login --name devops03acr
+docker push devops03acr.azurecr.io/app-api:1.0.0
 ```
 
 ## Install App
